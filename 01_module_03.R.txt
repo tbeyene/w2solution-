@@ -1,0 +1,81 @@
+# BUAN 5112 - Module 3
+
+library(tidyverse)
+library(here)
+library(BSDA)
+
+# Load data
+baseball <- read_csv(here("raw_data", "baseball.csv"))
+
+
+# Q1: Indicate the sample mean payroll price in millions. Round your result to
+# the nearest million.
+
+round(mean(baseball$Payroll.millions))
+
+# Q2: Indicate the corresponding standard deviation. Round your result to the
+# nearest million.
+
+round(sd(baseball$Payroll.millions))
+
+# Q3: What is the correlation coefficient for payroll in millions and number of
+# wins? Round your result to two decimal places.
+
+round(cor(baseball$Wins, baseball$Payroll.millions), 2) # note that since the number ends in a zero you do not see that zero
+
+# Q4: Interpret the correlation coefficient reported above.
+
+# There is a positive correlation between the payroll in millions and the number
+# of wins in a season. Hence, when the payroll goes up we would also expect to
+# see a higher number of wins, and vice versa.
+
+
+# The owner of a gasoline service station wants to study whether his advertising
+# campaign has increased the amount of gasoline purchased by motorists at his
+# station. Before the campaign the average purchase was 10 gallons. In a random
+# sample of 60 motorists, the mean purchase is 11.3 gallons with a standard
+# deviation of 3.1 gallons. At the 1% level of significance, test whether the
+# average purchase is larger than 10 gallons.
+
+# Q5: Write down the formal version of the null and alternative hypotheses.
+
+# H_0: \mu <= 10
+# H_a: \mu > 10
+
+
+# Q6: Explain why the appropriate test statistic is a t statistic rather than a
+# z-score.
+
+# We do not know the population standard deviation, only the sample standard
+# deviation. Hence, we cannot use the z-statistics but need the t-statistics.
+# The t-statistics is Student t distributed when the sample population is
+# normal.
+
+# Q7: Compute the test statistic with 3 decimals.
+
+round((11.3 - 10)/(3.1/sqrt(60)), 3)
+
+tsum.test(11.3, 3.1, 60, mu = 10) # If you would rather not write the formula
+
+# Q8: What are the degrees of freedom for the test statistics?
+
+60 - 1 # We "lose" one degree of freedom because we calculate a mean
+
+# Q9: What is the critical value for rejecting the null hypothesis? You can
+# either round up or down with your degrees of freedom when you look up the
+# number in the t table.
+
+qt(0.99, 59) # We want the right-hand side of the distribution since we are testing whether mu is larger than 10
+
+# Q10: Is there sufficient evidence to reject the null hypothesis? What is your
+# interpretation of this result? Explain briefly.
+
+# We reject the null hypothesis that the mean is equal to or less than 10
+# gallons after the advertising campaign because the t statistics of 3.248 is
+# larger than the critical value of 2.39.
+
+# You can also find the p-value by using pt(). Remember that it give you the PDF
+# for everything to the left of the value!
+1 - pt(3.248, 59)
+
+
